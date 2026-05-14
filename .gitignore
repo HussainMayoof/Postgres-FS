@@ -1,0 +1,5 @@
+.env
+testing.http
+
+node_modules/
+.idea/
