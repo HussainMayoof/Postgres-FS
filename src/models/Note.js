@@ -1,30 +1,33 @@
-import {DataTypes, Model} from 'sequelize'
-import sequelize from '../sequelize.js'
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../db.js';
 
 class Note extends Model {}
-Note.init({
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+Note.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+        important: {
+            type: DataTypes.BOOLEAN,
+        },
+        date: {
+            type: DataTypes.DATE,
+        },
     },
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: false
+    {
+        sequelize,
+        underscored: true,
+        timestamps: false,
+        modelName: 'note',
     },
-    important: {
-        type: DataTypes.BOOLEAN
-    },
-    date: {
-        type: DataTypes.DATE
-    }
-}, {
-    sequelize,
-    underscored: true,
-    timestamps: false,
-    modelName: 'note'
-})
+);
 
-Note.sync()
+Note.sync();
 
-export default Note
+export default Note;
