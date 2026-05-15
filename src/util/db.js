@@ -1,4 +1,4 @@
-import { DATABASE_URL } from './util/config.js';
+import { DATABASE_URL } from './config.js';
 import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize(DATABASE_URL, {

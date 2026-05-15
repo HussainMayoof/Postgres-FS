@@ -23,23 +23,23 @@ NotesRouter.get('/:id', noteFinder, async (req, res) => {
 });
 
 //Create one note
-NotesRouter.post('/', async (req, res) => {
+NotesRouter.post('/', async (req, res, next) => {
     try {
         const note = await Note.create({ ...req.body, date: new Date() });
         res.json(note);
     } catch (error) {
-        return res.status(400).json({ error });
+        next(error);
     }
 });
 
 //Update one note
-NotesRouter.put('/:id', noteFinder, async (req, res) => {
+NotesRouter.put('/:id', noteFinder, async (req, res, next) => {
     try {
         req.note.important = req.body.important;
         await req.note.save();
         res.json(req.note);
     } catch (error) {
-        return res.status(400).json({ error });
+        next(error);
     }
 });
 
