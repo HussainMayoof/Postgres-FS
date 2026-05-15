@@ -32,6 +32,17 @@ BlogsRouter.post('/', async (req, res) => {
     }
 });
 
+//Update one blog
+BlogsRouter.put('/:id', blogFinder, async (req, res) => {
+    try {
+        req.blog.likes = req.body.likes;
+        await req.blog.save();
+        res.json(req.blog);
+    } catch (error) {
+        res.status(400).send({ error });
+    }
+});
+
 //Delete one blog
 BlogsRouter.delete('/:id', blogFinder, async (req, res) => {
     await req.blog.destroy();
