@@ -1,7 +1,7 @@
-import express from 'express';
-import Blog from '../models/Blog.js';
+import { Router } from 'express';
+import { Blog } from '../models/index.js';
 
-const BlogsRouter = express.Router();
+const BlogsRouter = Router();
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id);

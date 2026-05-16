@@ -1,7 +1,8 @@
-import express from 'express';
-import Note from '../models/Note.js';
+import { Router } from 'express';
+import { Note, User } from '../models/index.js';
+import { tokenExtractor } from '../util/middlewares.js';
 
-const NotesRouter = express.Router();
+const NotesRouter = Router();
 
 const noteFinder = async (req, res, next) => {
     req.note = await Note.findByPk(req.params.id);
@@ -13,7 +14,13 @@ const noteFinder = async (req, res, next) => {
 
 //Get all notes
 NotesRouter.get('/', async (req, res) => {
-    const notes = await Note.findAll();
+    const notes = await Note.findAll({
+        attributes: { exclude: ['userId'] },
+        include: {
+            model: User,
+            attributes: ['name'],
+        },
+    });
     res.json(notes);
 });
 
@@ -23,9 +30,14 @@ NotesRouter.get('/:id', noteFinder, async (req, res) => {
 });
 
 //Create one note
-NotesRouter.post('/', async (req, res, next) => {
+NotesRouter.post('/', tokenExtractor, async (req, res, next) => {
     try {
-        const note = await Note.create({ ...req.body, date: new Date() });
+        const user = await User.findByPk(req.decodedToken.id);
+        const note = await Note.create({
+            ...req.body,
+            userId: user.id,
+            date: new Date(),
+        });
         res.json(note);
     } catch (error) {
         next(error);
