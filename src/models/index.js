@@ -7,7 +7,10 @@ Note.sync();
 Blog.sync();
 
 User.hasMany(Note);
+User.hasMany(Blog);
+
 Note.belongsTo(User);
+Blog.belongsTo(User);
 
 Note.sync({ alter: true });
 Blog.sync({ alter: true });

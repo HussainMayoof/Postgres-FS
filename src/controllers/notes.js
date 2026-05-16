@@ -5,7 +5,13 @@ import { tokenExtractor } from '../util/middlewares.js';
 const NotesRouter = Router();
 
 const noteFinder = async (req, res, next) => {
-    req.note = await Note.findByPk(req.params.id);
+    req.note = await Note.findByPk(req.params.id, {
+        attributes: { exclude: ['userId'] },
+        include: {
+            model: User,
+            attributes: ['name'],
+        },
+    });
     if (!req.note) {
         return res.status(404).end();
     }

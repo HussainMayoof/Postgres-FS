@@ -1,10 +1,17 @@
 import { Router } from 'express';
-import { Blog } from '../models/index.js';
+import { Blog, User } from '../models/index.js';
+import { tokenExtractor } from '../util/middlewares.js';
 
 const BlogsRouter = Router();
 
 const blogFinder = async (req, res, next) => {
-    req.blog = await Blog.findByPk(req.params.id);
+    req.blog = await Blog.findByPk(req.params.id, {
+        attributes: { exclude: ['userId'] },
+        include: {
+            model: User,
+            attributes: ['name'],
+        },
+    });
     if (!req.blog) {
         return res.status(404).end();
     }
@@ -23,9 +30,10 @@ BlogsRouter.get('/:id', blogFinder, async (req, res) => {
 });
 
 //Create one blog
-BlogsRouter.post('/', async (req, res, next) => {
+BlogsRouter.post('/', tokenExtractor, async (req, res, next) => {
     try {
-        const blog = await Blog.create({ ...req.body });
+        const user = await User.findByPk(req.decodedToken.id);
+        const blog = await Blog.create({ ...req.body, userId: user.id });
         res.json(blog);
     } catch (error) {
         next(error);
@@ -44,7 +52,11 @@ BlogsRouter.put('/:id', blogFinder, async (req, res, next) => {
 });
 
 //Delete one blog
-BlogsRouter.delete('/:id', blogFinder, async (req, res) => {
+BlogsRouter.delete('/:id', tokenExtractor, blogFinder, async (req, res) => {
+    const user = await User.findByPk(req.decodedToken.id);
+    if (user.id !== req.blog.userId) {
+        return res.status(401).end();
+    }
     await req.blog.destroy();
     return res.status(204).end();
 });

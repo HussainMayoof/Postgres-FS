@@ -1,24 +1,47 @@
 import { Router } from 'express';
-import { Note, User } from '../models/index.js';
+import { Blog, Note, User } from '../models/index.js';
 
 const UsersRouter = Router();
 
 //Get all users
 UsersRouter.get('/', async (req, res) => {
     const users = await User.findAll({
-        include: {
-            model: Note,
-            attributes: {
-                exclude: ['userId'],
+        include: [
+            {
+                model: Note,
+                attributes: {
+                    exclude: ['userId'],
+                },
             },
-        },
+            {
+                model: Blog,
+                attributes: {
+                    exclude: ['userId'],
+                },
+            },
+        ],
     });
     res.json(users);
 });
 
 //Get one user
 UsersRouter.get('/:id', async (req, res) => {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id, {
+        include: [
+            {
+                model: Note,
+                attributes: {
+                    exclude: ['userId'],
+                },
+            },
+            {
+                model: Blog,
+                attributes: {
+                    exclude: ['userId'],
+                },
+            },
+        ],
+    });
     if (user) {
         res.json(user);
     } else {
