@@ -4,6 +4,7 @@ import BlogsRouter from './controllers/blogs.js';
 import { errorHandler } from './util/middlewares.js';
 import UsersRouter from './controllers/users.js';
 import LoginRouter from './controllers/login.js';
+import AuthorsRouter from './controllers/authors.js';
 const app = express();
 app.use(express.json());
 
@@ -11,6 +12,7 @@ app.use('/api/notes', NotesRouter);
 app.use('/api/blogs', BlogsRouter);
 app.use('/api/users', UsersRouter);
 app.use('/api/login', LoginRouter);
+app.use('/api/authors', AuthorsRouter);
 app.use(errorHandler);
 
 export default app;
