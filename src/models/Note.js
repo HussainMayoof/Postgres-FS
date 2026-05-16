@@ -20,6 +20,7 @@ Note.init(
         },
         important: {
             type: DataTypes.BOOLEAN,
+            defaultValue: false,
         },
         date: {
             type: DataTypes.DATE,
