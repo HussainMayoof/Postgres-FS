@@ -12,6 +12,11 @@ Note.init(
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Note content is required',
+                },
+            },
         },
         important: {
             type: DataTypes.BOOLEAN,

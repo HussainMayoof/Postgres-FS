@@ -2,10 +2,13 @@ import jwt from 'jsonwebtoken';
 import { SECRET } from './config.js';
 
 const errorHandler = (error, req, res, next) => {
-    if (error.name === 'SequelizeValidationError') {
+    if (
+        error.name === 'SequelizeValidationError' ||
+        error.name === 'SequelizeUniqueConstraintError'
+    ) {
         console.log(error.message);
 
-        return res.status(400).send({ error: 'Invalid body data' });
+        return res.status(400).send({ error: error.errors[0].message });
     } else if (error.name === 'LoginError') {
         const message = 'Invalid username or password';
         console.log(message);
@@ -23,6 +26,7 @@ const errorHandler = (error, req, res, next) => {
         return res.status(401).send({ error: message });
     } else {
         console.log(error.message);
+        console.log(error.name);
     }
 
     next(error);
