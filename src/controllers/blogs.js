@@ -7,7 +7,6 @@ const BlogsRouter = Router();
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id, {
-        attributes: { exclude: ['userId'] },
         include: {
             model: User,
             attributes: ['name'],
@@ -32,11 +31,11 @@ BlogsRouter.get('/', async (req, res) => {
     }
 
     const blogs = await Blog.findAll({
-        attributes: { exclude: ['userId'] },
         include: {
             model: User,
             attributes: ['name'],
         },
+        order: [['likes', 'DESC']],
         where,
     });
     res.json(blogs);
