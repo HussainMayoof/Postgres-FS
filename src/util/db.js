@@ -12,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const migrationConf = {
     migrations: {
-        glob: path.join(__dirname, '../migrations/*.js'),
+        glob: path.join(__dirname, '../migrations/*.js').replace(/\\/g, '/'),
         resolve: ({ name, path: migPath, context }) => {
             const migration = import(pathToFileURL(migPath).href);
             return {
