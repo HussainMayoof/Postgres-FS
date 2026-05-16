@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { SECRET } from './config.js';
+import { User } from '../models/index.js';
 
 const errorHandler = (error, req, res, next) => {
     if (
@@ -47,4 +48,14 @@ const tokenExtractor = (req, res, next) => {
     next();
 };
 
-export { errorHandler, tokenExtractor };
+const isAdmin = async (req, res, next) => {
+    const user = User.findByPk(req.decodedToken.id);
+    if (!user.admin) {
+        return res
+            .status(401)
+            .send('Only an admin can carry out this operation');
+    }
+    next();
+};
+
+export { errorHandler, tokenExtractor, isAdmin };

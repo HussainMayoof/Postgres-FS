@@ -10,14 +10,16 @@
         "test": "node --test --test-concurrency=1 tests/api_ch3.test.js",
         "dev": "nodemon --watch src index.js",
         "start": "node index.js",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "migration:down": "node src/util/rollback.js"
     },
     "dependencies": {
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "jsonwebtoken": "^9.0.3",
         "pg": "^8.20.0",
-        "sequelize": "^6.37.8"
+        "sequelize": "^6.37.8",
+        "umzug": "^3.8.3"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",

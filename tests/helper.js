@@ -46,7 +46,4 @@ const resetAndSeed = async () => {
     };
 };
 
-export { baseUrl };
-export { resetAndSeed };
-export { createUser };
-export { login };
+export { baseUrl, resetAndSeed, createUser, login };

@@ -15,6 +15,12 @@ LoginRouter.post('/', async (req, res, next) => {
         return next({ name: 'LoginError' });
     }
 
+    if (user.disabled) {
+        return res
+            .send(401)
+            .json({ error: 'Account disabled, please contact admin' });
+    }
+
     const { name, id } = user;
     const token = jwt.sign({ username, id }, SECRET);
 

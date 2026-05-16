@@ -34,6 +34,4 @@ Note.init(
     },
 );
 
-Note.sync();
-
 export default Note;
