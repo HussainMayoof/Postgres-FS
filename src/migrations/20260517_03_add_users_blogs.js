@@ -21,7 +21,7 @@ export default {
             read: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
-                defaultValue: true,
+                defaultValue: false,
             },
         });
     },

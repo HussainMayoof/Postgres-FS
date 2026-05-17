@@ -47,6 +47,14 @@ UsersRouter.get('/:id', async (req, res) => {
                     exclude: ['userId'],
                 },
             },
+            {
+                model: Blog,
+                as: 'readings',
+                attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+                through: {
+                    attributes: [],
+                },
+            },
         ],
     });
     if (user) {

@@ -23,13 +23,13 @@ Users_Blogs.init(
         read: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: true,
+            defaultValue: false,
         },
     },
     {
         sequelize,
         underscored: true,
-        timestamps: true,
+        timestamps: false,
         modelName: 'users_blogs',
     },
 );
