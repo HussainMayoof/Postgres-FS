@@ -51,6 +51,7 @@ Blog.init(
                     msg: "Blog can't be from the future!",
                 },
             },
+            defaultValue: new Date().getFullYear(),
         },
     },
     {

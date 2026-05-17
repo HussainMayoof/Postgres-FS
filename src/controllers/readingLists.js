@@ -1,15 +1,39 @@
 import { Router } from 'express';
-import { User, Users_Blogs } from '../models/index.js';
+import { Blog, User, Users_Blogs } from '../models/index.js';
 import { tokenExtractor } from '../util/middlewares.js';
 
 const ReadingListsRouter = Router();
 
-ReadingListsRouter.post('/', async (req, res) => {
+ReadingListsRouter.post('/', async (req, res, next) => {
+    const { blogId, userId } = req.body;
+
+    if (!blogId) {
+        return res.status(400).json({ error: 'blogId is required' });
+    }
+    if (!userId) {
+        return res.status(400).json({ error: 'userId is required' });
+    }
+
+    const blog = await Blog.findByPk(blogId);
+    if (!blog) {
+        return res.status(404).json({ error: 'Blog not found' });
+    }
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    const existing = await Users_Blogs.findOne({ where: { blogId, userId } });
+    if (existing) {
+        return res.status(400).json({ error: 'Already in reading list' });
+    }
+
     try {
-        const relationship = await Users_Blogs.create(req.body);
+        const relationship = await Users_Blogs.create({ blogId, userId });
         res.send(relationship);
     } catch {
-        return res.status(400).send({ error: 'Invalid userId or blogId' });
+        next();
     }
 });
 

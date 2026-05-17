@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../util/db.js';
 
-class Users_Blogs extends Model {}
+class Session extends Model {}
 
-Users_Blogs.init(
+Session.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -13,27 +13,16 @@ Users_Blogs.init(
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            unique: 'users_blogs',
             references: { model: 'users', key: 'id' },
-        },
-        blogId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: 'users_blogs',
-            references: { model: 'blogs', key: 'id' },
-        },
-        read: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
         },
     },
     {
         sequelize,
         underscored: true,
         timestamps: false,
-        modelName: 'users_blogs',
+        modelName: 'session',
+        tableName: '_sessions_',
     },
 );
 
-export default Users_Blogs;
+export default Session;

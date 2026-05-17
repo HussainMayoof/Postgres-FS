@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Router } from 'express';
 import { SECRET } from '../util/config.js';
-import { User } from '../models/index.js';
+import { Session, User } from '../models/index.js';
 
 const LoginRouter = Router();
 
@@ -17,12 +17,13 @@ LoginRouter.post('/', async (req, res, next) => {
 
     if (user.disabled) {
         return res
-            .send(401)
+            .status(401)
             .json({ error: 'Account disabled, please contact admin' });
     }
 
     const { name, id } = user;
-    const token = jwt.sign({ username, id }, SECRET);
+    const session = await Session.create({ userId: id });
+    const token = jwt.sign({ username, id, sessionId: session.id }, SECRET);
 
     res.status(200).send({ token, username, name });
 });

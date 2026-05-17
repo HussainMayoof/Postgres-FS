@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Blog, User } from '../models/index.js';
+import { Blog, Session, User } from '../models/index.js';
 import { tokenExtractor } from '../util/middlewares.js';
 import { Op } from 'sequelize';
 

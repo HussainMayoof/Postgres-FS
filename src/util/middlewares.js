@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { SECRET } from './config.js';
-import { User } from '../models/index.js';
+import { Blog, Session, User } from '../models/index.js';
 
 const errorHandler = (error, req, res, next) => {
     if (
@@ -33,11 +33,16 @@ const errorHandler = (error, req, res, next) => {
     next(error);
 };
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
     const authorization = req.get('authorization');
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         try {
-            req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+            const decodedToken = jwt.verify(authorization.substring(7), SECRET);
+            const session = await Session.findByPk(decodedToken.sessionId);
+            if (!session) {
+                return res.status(401).end();
+            }
+            req.decodedToken = decodedToken;
         } catch {
             return next({ name: 'InvalidTokenError' });
         }
