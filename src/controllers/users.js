@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { Blog, Note, Team, User } from '../models/index.js';
+import { Op } from 'sequelize';
 
 const UsersRouter = Router();
 
@@ -33,6 +34,13 @@ UsersRouter.get('/', async (req, res) => {
 
 //Get one user
 UsersRouter.get('/:id', async (req, res) => {
+    let where = {};
+    if (req.query.read) {
+        where = {
+            read: req.query.read === 'true',
+        };
+    }
+
     const user = await User.findByPk(req.params.id, {
         include: [
             {
@@ -54,6 +62,7 @@ UsersRouter.get('/:id', async (req, res) => {
                 through: {
                     as: 'readinglists',
                     attributes: ['read', 'id'],
+                    where,
                 },
             },
         ],
