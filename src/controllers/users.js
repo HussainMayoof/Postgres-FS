@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Blog, Note, User } from '../models/index.js';
+import { Blog, Note, Team, User } from '../models/index.js';
 
 const UsersRouter = Router();
 
@@ -17,6 +17,13 @@ UsersRouter.get('/', async (req, res) => {
                 model: Blog,
                 attributes: {
                     exclude: ['userId'],
+                },
+            },
+            {
+                model: Team,
+                attributes: ['name', 'id'],
+                through: {
+                    attributes: [],
                 },
             },
         ],
